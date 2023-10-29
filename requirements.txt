@@ -1,4 +1,4 @@
 requests[socks]
 PySocks
-git+https://github.com/TheEnbyperor/sslyze.git@42f62469ef2d1921016fe2144f8854d3ca6bab55
+git+https://github.com/TheEnbyperor/sslyze.git@8e2b9f3ae362d8bbe261fef0f9f893796242868e
 stem==1.8.2

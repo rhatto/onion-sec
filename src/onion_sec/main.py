@@ -48,8 +48,8 @@ class OnionSec:
         }, verify=False)
         return r
 
-    def get_socket(self):
-        s = socks.socksocket()
+    def get_socket(self, inet_family=socket.AF_INET):
+        s = socks.socksocket(inet_family)
         s.set_proxy(socks.SOCKS5, self.proxy_addr, self.proxy_port, True)
         s.settimeout(30)
         return s
@@ -160,10 +160,15 @@ class OnionSec:
         )
 
     def test_open_port(self, domain: str, port: int):
-        s = self.get_socket()
         try:
-            s.connect((domain, port))
-            return True
+            try:
+                s = self.get_socket(socket.AF_INET6)
+                s.connect((domain, port))
+                return True
+            except socks.ProxyConnectionError:
+                s = self.get_socket(socket.AF_INET)
+                s.connect((domain, port))
+                return True
         except (socket.error, TimeoutError):
             return False
 
