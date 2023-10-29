@@ -9,13 +9,30 @@ import logging
 from . import types
 
 
+class ControlPort(stem.control.ControlSocket):
+    def __init__(self, address='127.0.0.1', port=9051, connect=True):
+        super(ControlPort, self).__init__()
+        self.address = address
+        self.port = port
+
+        if connect:
+            self.connect()
+
+    def _make_socket(self):
+        try:
+            control_socket = socket.create_connection((self.address, self.port), 30)
+            return control_socket
+        except socket.error as exc:
+            raise stem.SocketError(exc)
+
+
 class OnionSec:
     def __init__(self, proxy_addr: str, proxy_port: int, control_port: int, control_password: typing.Optional[str] = None):
         self.logger = logging.getLogger("onionsec")
         self.proxy_addr = proxy_addr
         self.proxy_port = proxy_port
         self.scanner = sslyze.Scanner()
-        control_socket = stem.socket.ControlPort(proxy_addr, control_port)
+        control_socket = ControlPort(proxy_addr, control_port)
         self.controller = stem.control.Controller(control_socket)
         self.controller.authenticate(control_password)
 
