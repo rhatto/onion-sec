@@ -9,7 +9,7 @@ dependencies = [
     "requests[socks]",
     "PySocks",
     "sslyze @ https://github.com/TheEnbyperor/sslyze/archive/refs/heads/release.zip",
-    "stem @ https://github.com/torproject/stem/archive/refs/heads/master.zip",
+    "stem==1.8.2",
 ]
 
 [build-system]
