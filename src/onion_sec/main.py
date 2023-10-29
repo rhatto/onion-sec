@@ -10,14 +10,13 @@ from . import types
 
 
 class OnionSec:
-    def __init__(
-            self, proxy_addr: str, proxy_port: int, control_port: int, control_password: typing.Optional[str] = None
-    ):
+    def __init__(self, proxy_addr: str, proxy_port: int, control_port: int, control_password: typing.Optional[str] = None):
         self.logger = logging.getLogger("onionsec")
         self.proxy_addr = proxy_addr
         self.proxy_port = proxy_port
         self.scanner = sslyze.Scanner()
-        self.controller = stem.control.Controller.from_port(address=proxy_addr, port=control_port)
+        control_socket = stem.socket.ControlPort(proxy_addr, control_port)
+        self.controller = stem.control.Controller(control_socket)
         self.controller.authenticate(control_password)
 
     @property
