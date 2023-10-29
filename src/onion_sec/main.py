@@ -9,7 +9,7 @@ import logging
 from . import types
 
 
-class ControlPort(stem.control.ControlSocket):
+class ControlPort(stem.socket.ControlSocket):
     def __init__(self, address='127.0.0.1', port=9051, connect=True):
         super(ControlPort, self).__init__()
         self.address = address
