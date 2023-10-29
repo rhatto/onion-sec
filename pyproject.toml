@@ -1,0 +1,25 @@
+[project]
+name = "onion-sec"
+version = "0.0.1"
+authors = [
+    {name = "Q Misell", email = "q@as207960.net"}
+]
+license = {text = "MIT"}
+dependencies = [
+    "requests[socks]",
+    "PySocks",
+    "git+https://github.com/TheEnbyperor/sslyze.git@42f62469ef2d1921016fe2144f8854d3ca6bab55",
+    "stem",
+]
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["onion_sec"]
+
+[tool.setuptools]
+zip-safe = false
+package-dir = {"" = "src"}

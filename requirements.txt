@@ -1,0 +1,4 @@
+requests[socks]
+PySocks
+git+https://github.com/TheEnbyperor/sslyze.git@42f62469ef2d1921016fe2144f8854d3ca6bab55
+stem
