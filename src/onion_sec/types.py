@@ -75,6 +75,7 @@ class HTTPReport:
     cross_origin_embedder_policy: typing.Optional[HeaderReport]
     cross_origin_opener_policy: typing.Optional[HeaderReport]
     cross_origin_resource_policy: typing.Optional[HeaderReport]
+    onion_location: typing.Optional[HeaderReport]
 
 
 @dataclasses.dataclass

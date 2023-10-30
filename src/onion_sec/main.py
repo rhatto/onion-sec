@@ -278,7 +278,7 @@ class OnionSec:
             value = headers["cross-origin-embedder-policy"].strip()
             cross_origin_embedder_policy = types.HeaderReport(
                 value=value,
-                secure=value != "unsafe-none",
+                secure=not value.contains("unsafe-"),
             )
         else:
             cross_origin_embedder_policy = None
@@ -287,7 +287,7 @@ class OnionSec:
             value = headers["cross-origin-opener-policy"].strip()
             cross_origin_opener_policy = types.HeaderReport(
                 value=value,
-                secure=value != "unsafe-none",
+                secure=not value.contains("unsafe-"),
             )
         else:
             cross_origin_opener_policy = None
@@ -300,6 +300,14 @@ class OnionSec:
         else:
             cross_origin_resource_policy = None
 
+        if "onion-location" in headers:
+            onion_location = types.HeaderReport(
+                value=headers["onion-location"],
+                secure=True
+            )
+        else:
+            onion_location = None
+
         return types.HTTPReport(
             strict_transport_security=strict_transport_security,
             content_security_policy=content_security_policy,
@@ -311,6 +319,7 @@ class OnionSec:
             cross_origin_embedder_policy=cross_origin_embedder_policy,
             cross_origin_opener_policy=cross_origin_opener_policy,
             cross_origin_resource_policy=cross_origin_resource_policy,
+            onion_location=onion_location,
         )
 
     def test_apache_mod_status(self, target: str):
