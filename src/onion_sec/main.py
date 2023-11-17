@@ -32,9 +32,8 @@ class OnionSec:
         self.proxy_addr = proxy_addr
         self.proxy_port = proxy_port
         self.scanner = sslyze.Scanner()
-        control_socket = ControlPort(proxy_addr, control_port)
-        self.controller = stem.control.Controller(control_socket)
-        self.controller.authenticate(control_password)
+        self.control_socket = ControlPort(proxy_addr, control_port)
+        self.control_password = control_password
 
     @property
     def proxy_url(self):
@@ -56,7 +55,9 @@ class OnionSec:
 
     def get_hs_descriptor(self, domain: str):
         self.logger.info(f"Fetching descriptor for {domain}")
-        desc = self.controller.get_hidden_service_descriptor(domain, timeout=30)
+        controller = stem.control.Controller(self.control_socket)
+        controller.authenticate(self.control_password)
+        desc = controller.get_hidden_service_descriptor(domain, timeout=30)
         if not desc:
             return None
         try:
