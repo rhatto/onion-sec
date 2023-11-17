@@ -236,7 +236,7 @@ class OnionSec:
             permissions_policy = None
 
         if "x-frame-options" in headers:
-            value = headers["x-frame-options"].strip()
+            value = headers["x-frame-options"].strip().upper()
             x_frame_options = types.HeaderReport(
                 value=value,
                 secure=value == "DENY" or value == "SAMEORIGIN",
@@ -245,7 +245,7 @@ class OnionSec:
             x_frame_options = None
 
         if "x-content-type-options" in headers:
-            value = headers["x-content-type-options"].strip()
+            value = headers["x-content-type-options"].strip().lower()
             x_content_type_options = types.HeaderReport(
                 value=value,
                 secure=value == "nosniff",
@@ -254,7 +254,7 @@ class OnionSec:
             x_content_type_options = None
 
         if "referer-policy" in headers:
-            value = headers["referer-policy"].strip()
+            value = headers["referer-policy"].strip().lower()
             referer_policy = types.HeaderReport(
                 value=value,
                 secure=value != "unsafe-url",
