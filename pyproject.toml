@@ -1,6 +1,6 @@
 [project]
 name = "onion-sec"
-version = "0.0.3"
+version = "0.0.4"
 authors = [
     {name = "Q Misell", email = "q@as207960.net"}
 ]

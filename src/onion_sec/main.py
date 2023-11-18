@@ -279,7 +279,7 @@ class OnionSec:
             value = headers["cross-origin-embedder-policy"].strip()
             cross_origin_embedder_policy = types.HeaderReport(
                 value=value,
-                secure=not value.contains("unsafe-"),
+                secure="unsafe-" not in value,
             )
         else:
             cross_origin_embedder_policy = None
@@ -288,7 +288,7 @@ class OnionSec:
             value = headers["cross-origin-opener-policy"].strip()
             cross_origin_opener_policy = types.HeaderReport(
                 value=value,
-                secure=not value.contains("unsafe-"),
+                secure="unsafe-" not in value,
             )
         else:
             cross_origin_opener_policy = None
