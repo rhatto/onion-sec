@@ -1,0 +1,19 @@
+---
+variables:
+  ONION_ADDR_HTTP: 2gzyxa5ihm7nsggfxnu52rck2vv4rvmdlkiu3zzui5du4xyclen53wid.onion
+  ONION_ADDR_HTTPS: v236xhqtyullodhf26szyjepvkbv6iitrhjgrqj4avaoukebkk6n6syd.onion
+
+build-and-test:
+  image: debian:bookworm
+
+  script:
+    - apt-get update
+    - apt-get dist-upgrade -y
+    - apt-get install -y python3-pip python3-virtualenv tor
+    - virtualenv venv
+    - venv/bin/pip install .
+    - mkdir $HOME/tor
+    - tor --RunAsDaemon 1 --SocksPort 9052 --ControlPort 9053 --CookieAuthentication 1 --DataDirectory $HOME/tor
+    - sleep 60
+    - venv/bin/onion-sec --proxy_port 9052 --control_port 9053 $ONION_ADDR_HTTP
+    - venv/bin/onion-sec --proxy_port 9052 --control_port 9053 $ONION_ADDR_HTTPS
