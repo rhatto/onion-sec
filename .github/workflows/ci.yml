@@ -1,0 +1,55 @@
+---
+name: CI
+
+env:
+  ONION_ADDR_HTTP: 2gzyxa5ihm7nsggfxnu52rck2vv4rvmdlkiu3zzui5du4xyclen53wid.onion
+  ONION_ADDR_HTTPS: v236xhqtyullodhf26szyjepvkbv6iitrhjgrqj4avaoukebkk6n6syd.onion
+
+on: push
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    container:
+      image: debian:bookworm
+
+    concurrency:
+      group: ci-${{ github.ref }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          set-safe-directory: true
+
+      - name: Update the list of packages
+        run: apt-get update
+
+      - name: Upgrade the system
+        run: apt-get dist-upgrade -y
+
+      - name: Install dependencies
+        run: apt-get install -y python3-pip python3-virtualenv tor
+
+      - name: Create a virtualenv
+        run: virtualenv venv
+
+      - name: Install onion-sec
+        run: venv/bin/pip install .
+
+      - name: Configure
+        run: mkdir $HOME/tor
+
+      - name: Daemonize
+        run: tor --RunAsDaemon 1 --SocksPort 9052 --ControlPort 9053 --CookieAuthentication 1 --DataDirectory $HOME/tor
+
+      - name: Sleep for a while
+        run: sleep 60
+
+      - name: HTTP Test
+        run: venv/bin/onion-sec --proxy_port 9052 --control_port 9053 $ONION_ADDR_HTTP
+
+      - name: HTTPS Test
+        run: venv/bin/onion-sec --proxy_port 9052 --control_port 9053 $ONION_ADDR_HTTPS

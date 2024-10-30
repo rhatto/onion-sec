@@ -2,10 +2,10 @@ import logging
 import argparse
 import json
 import dataclasses
-import onion_sec
+from onion_sec.main import OnionSec
 
 
-def main():
+def run():
     logging.basicConfig(level=logging.INFO)
 
     parser = argparse.ArgumentParser()
@@ -15,12 +15,8 @@ def main():
     parser.add_argument('--control_port', default=9051, type=int)
     args = parser.parse_args()
 
-    onion_sec = onion_sec.OnionSec(args.proxy_addr, args.proxy_port, args.control_port)
+    onion_sec = OnionSec(args.proxy_addr, args.proxy_port, args.control_port)
     print(json.dumps(
         dataclasses.asdict(onion_sec.run_report(args.domain)),
         indent=2,
     ))
-
-
-if __name__ == '__main__':
-    main()

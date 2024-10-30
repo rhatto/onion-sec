@@ -23,3 +23,6 @@ include = ["onion_sec"]
 [tool.setuptools]
 zip-safe = false
 package-dir = {"" = "src"}
+
+[project.scripts]
+onion-sec = "onion_sec:cli.run"
